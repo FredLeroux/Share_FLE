@@ -12,7 +12,7 @@ public class MmMain {
 		
 			
 		
-new MmRandomGenerator();		
+	
 new MmMainMenu();
 
 

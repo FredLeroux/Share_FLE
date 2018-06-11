@@ -32,7 +32,7 @@ public class MmOperatorChoice {
 		} else if (MmMenuHead.title.contains("Play")) {
 			choiceAquisition = menuChoicePlayGameMenu.getPlayGameMenuOptions().get(choice);
 			if (choiceAquisition.contains("Play")) {
-				System.out.println("Wanna Play?");
+				new MmRandomGenerator();
 			} else if (choiceAquisition.contains("Quit")) {
 				new MmAppQuit();
 			} else {
