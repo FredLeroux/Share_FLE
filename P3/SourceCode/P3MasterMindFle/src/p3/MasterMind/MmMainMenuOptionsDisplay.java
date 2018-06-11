@@ -9,6 +9,7 @@ class MmMainMenuOptionsDisplay extends MmMainMenuOptions {
 			System.out.println(i +": " + mainMenuOptions.get(i));
 		}
 		System.out.print("\n");
+		new MmOperatorChoice();
 	}
 
 }

@@ -12,12 +12,12 @@ public class MmGameMenuOptions {
 	
 	public MmGameMenuOptions() {
 
-		gameMenuOptions.put(1, ": Play Challenger mode");
-		gameMenuOptions.put(2, ": Play Défenseur Mode");
-		gameMenuOptions.put(3, ": Play Duel Mode");
-		gameMenuOptions.put(4, ": Rules");
-		gameMenuOptions.put(5, ": Back to Main Menu");
-		gameMenuOptions.put(6, ": Quit");
+		gameMenuOptions.put(1, "Play Challenger mode");
+		gameMenuOptions.put(2, "Play Défenseur Mode");
+		gameMenuOptions.put(3, "Play Duel Mode");
+		gameMenuOptions.put(4, "Rules");
+		gameMenuOptions.put(5, "Main Menu");
+		gameMenuOptions.put(6, "Quit");
 		
 		
 

@@ -4,7 +4,7 @@ public class MmMenuHead {
 	/** class MmMenuHead define each menu head */
 
 	protected static String title;
-	private String devMode;
+	//private String devMode;
 
 	/**
 	 * title = Menu Title devMode = Indicate if developer mode is on or not
@@ -12,30 +12,30 @@ public class MmMenuHead {
 	// TODO implement devmode
 	public MmMenuHead() {
 		MmMenuHead.title = null;
-		this.devMode = null;
+		//this.devMode = null;
 	}
 
-	public String getTtile() {
+	public String getTile() {
 		return MmMenuHead.title;
 	}
 
-	public String getDevMode() {
-		return this.devMode;
-	}
+	//public String getDevMode() {
+		//return this.devMode;
+	//}
 
 	public void setTitle(String titleName) {
-		/** variable titleName define the title Name */
-		MmMenuHead.title = titleName;
+		///** variable titleName define the title Name */
+		title = titleName;
 	}
 
-	public void setDevMode(String DevModeOn) {
-		/** variable DevModeOn displayed if Developer mode is active */
-		this.devMode = DevModeOn;
-	}
+	//public void setDevMode(String DevModeOn) {
+		///** variable DevModeOn displayed if Developer mode is active */
+		//this.devMode = DevModeOn;
+	//}
 
 	public MmMenuHead(String titleName) {
 /** Creation of the menu head*/
-		title = titleName;
+		MmMenuHead.title = titleName;
 		
 	}
 
