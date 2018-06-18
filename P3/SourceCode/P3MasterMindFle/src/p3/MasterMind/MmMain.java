@@ -1,5 +1,7 @@
 package p3.MasterMind;
 
+import java.util.ArrayList;
+
 public class MmMain {
 	
 	
@@ -15,11 +17,21 @@ public class MmMain {
 
 		// Note: this project is not finalized./
 
-	new MmMainMenu ();
+	//	new MmOpChoiceAnalysis();
+		
+		//new MmMainMenu ();
 		
 	//MmMenuElements test1 = new MmMenuElements();
 	//test1.setHeadTable(test1.getHeadTable());;
 	//System.out.println(test1.getHeadTable());
+		
+		test test1 = new test();
+		test1.setTitle(MmTerms.term19 + MmTerms.term4 + " " + MmTerms.term14 + MmTerms.term20);
+		test1.dMenuTitle();
+		test1.dMainMenuOpt();
+		test1.dGameMenuOpt();
+		test1.dPlayGameMenu();
+		
 		
 		
 	
