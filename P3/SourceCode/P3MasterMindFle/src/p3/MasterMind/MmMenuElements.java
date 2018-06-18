@@ -1,123 +1,112 @@
 package p3.MasterMind;
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
+import java.util.Scanner;
 
-public class MmMenuElements  {
-	/** class MmMenuHead define each menu head */
+public class test {
+	private String title, subTitle;
+	protected static String choiceAquisition, titleSet;
+	protected static int choice;
+	private ArrayList<String> menuTitle, menuSubtitle;
+	private HashMap<Integer, String> appWelcomeScreenOpt, mainMenuOpt, gameMenuOpt, playMenuOpt, optionsTable;
+	private Scanner choiceEntry = new Scanner(System.in);
 
-	private String element1, element2, element3, element4, element5, element6;
-	protected static String title,subTitle ;
-	protected static int option1,option2,option3,option4,option5,option6;
-	private  ArrayList<String> headTable ;
-	private  HashMap <Integer,String> optionsTable;
+	public test() {
+		this.title = null;
+		this.subTitle = null;
+		// test.choiceAquisition=null;
+		// test.titleSet=null;
 
-	// private String devMode;
+		this.menuTitle = new ArrayList<String>();
+		this.menuSubtitle = new ArrayList<String>();
+		this.appWelcomeScreenOpt = new HashMap<Integer, String>();
+		this.mainMenuOpt = new HashMap<Integer, String>();
+		this.gameMenuOpt = new HashMap<Integer, String>();
+		this.playMenuOpt = new HashMap<Integer, String>();
+		this.optionsTable = new HashMap<Integer, String>();
 
-	/**
-	 * title = Menu Title devMode = Indicate if developer mode is on or not
-	 * 
-	 */
-	// TODO implement devmode
-	public MmMenuElements() {
-		this.element1 = null;
-		this.element2 = null;
-		this.element3 = null;
-		this.element4 = null;
-		this.element5= null;
-		this.element6= null;
-		MmMenuElements.title = null;
-		MmMenuElements.subTitle =null;
-		MmMenuElements.option1 = 1;
-		MmMenuElements.option2 = 2;
-		MmMenuElements.option3 = 3;
-		MmMenuElements.option4 = 4;
-		MmMenuElements.option5 = 5;
-		MmMenuElements.option6 = 6;
-		this.headTable = new ArrayList<String>();
-		this.optionsTable = new HashMap <Integer,String>() ;
-		
 	}
 
-	public String getElement1() {
-		return this.element1;
-	}
-	public String getElement2() {
-		return this.element2;
-	}
-	public String getElement3() {
-		return this.element3;
-	}
-	public String getElement4() {
-		return this.element4;
-	}
-	public String getElement5() {
-		return this.element5;
-	}
-	public String getElement6() {
-		return this.element6;
-	}
 	public String getTitle() {
-		return MmMenuElements.title;
+		return this.title;
 	}
+
 	public String getSubTitle() {
-		return MmMenuElements.subTitle;
+		return this.subTitle;
 	}
 
-	public ArrayList<String> getHeadTable(){
-		return this.headTable ;
-	}
-	
-	public HashMap <Integer,String> getOptionsTable(){
-		return this.optionsTable;
-	}
-
-	public void setElement1(String nElement1) {
-		this.element1 = nElement1;
-	}
-
-	public void setElement2(String nElement2) {
-		this.element2 = nElement2;
-	}
-	public void setElement3(String nElement3) {
-		this.element3 = nElement3;
-	}
-	public void setElement4(String nElement4) {
-		this.element4 = nElement4;
-	}
-	public void setElement5(String nElement5) {
-		this.element5 = nElement5;
-	}
-	public void setElement6(String nElement6) {
-		this.element6 = nElement6;
-	}
 	public void setTitle(String nTitle) {
-		MmMenuElements.title = nTitle;
+		this.title = nTitle;
 	}
-	public void setSubTitle(String nSubTitle) {
-		MmMenuElements.subTitle = nSubTitle;
-	}
-	
-	public void setHeadTable(ArrayList<String>alHeadTable) {
-		this.headTable = alHeadTable;
-		
-		
-		
-		
-		}
-	
-	
-	
-	public void setOptionsTable(HashMap <Integer,String> hmOptionsTable) {
-		this.optionsTable = new HashMap <Integer,String>(hmOptionsTable);
-		}
-	
-	
-	}
-	
-	
-	
 
-		
-	
+	public void setSubTitle(String nSubTitle) {
+		this.subTitle = nSubTitle;
+	}
+
+	public ArrayList<String> dMenuTitle() {
+		menuTitle.add(this.title + "\n");
+		menuTitle.forEach(title -> System.out.println(title));
+		return this.menuTitle;
+	}
+
+	public ArrayList<String> dMenuSubTitle() {
+		menuSubtitle.add(this.subTitle + "\n");
+		menuSubtitle.forEach(subTitle -> System.out.println(subTitle));
+		return this.menuSubtitle;
+	}
+
+	public HashMap<Integer, String> dAppWelcomeScreen() {
+		appWelcomeScreenOpt.put(1, "Start");
+		appWelcomeScreenOpt.put(2, "Quit" + "\n");
+		optionsTable = appWelcomeScreenOpt;
+		return this.appWelcomeScreenOpt;
+	}
+
+	public HashMap<Integer, String> dMainMenuOpt() {
+		mainMenuOpt.put(1, MmTerms.term5 + " " + MmTerms.term15);
+		mainMenuOpt.put(2, MmTerms.term6 + " " + MmTerms.term15);
+		mainMenuOpt.put(3, MmTerms.term7 + " " + MmTerms.term16);
+		mainMenuOpt.put(4, MmTerms.term8);
+		mainMenuOpt.put(5, MmTerms.term9);
+		mainMenuOpt.put(6, MmTerms.term10 + "\n");
+		optionsTable = mainMenuOpt;
+		return this.mainMenuOpt;
+	}
+
+	public HashMap<Integer, String> dGameMenuOpt() {
+		gameMenuOpt.put(1, MmTerms.term17 + " " + MmTerms.term11 + " " + MmTerms.term16);
+		gameMenuOpt.put(2, MmTerms.term17 + " " + MmTerms.term12 + " " + MmTerms.term16);
+		gameMenuOpt.put(3, MmTerms.term17 + " " + MmTerms.term13 + " " + MmTerms.term16);
+		gameMenuOpt.put(4, MmTerms.term8);
+		gameMenuOpt.put(5, MmTerms.term4 + " " + MmTerms.term14);
+		gameMenuOpt.put(6, MmTerms.term10 + "\n");
+		optionsTable = gameMenuOpt;
+		return this.gameMenuOpt;
+	}
+
+	public HashMap<Integer, String> dPlayGameMenu() {
+		playMenuOpt.put(1, MmTerms.term17);
+		playMenuOpt.put(2, "Main Menu");
+		playMenuOpt.put(3, MmTerms.term10 + "\n");
+		optionsTable = playMenuOpt;
+		return this.playMenuOpt;
+	}
+
+	public void display() {
+		optionsTable.forEach((key, value) -> System.out.println(key + ": " + value));
+	}
+
+	public void askChoice() {
+		System.out.println("Please enter your choice");
+		test.choice = choiceEntry.nextInt();
+
+	}
+
+	public void loop() {
+		test.choiceAquisition = testsuiteamettreddasnmain.menuChoiceAquisition;
+		test.titleSet = testsuiteamettreddasnmain.titleSetted;
+		new testsuiteamettreddasnmain();
+	}
+
+}
