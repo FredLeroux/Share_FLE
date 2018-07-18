@@ -1,10 +1,10 @@
 package p3.Game;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 import java.util.Random;
 
 
-public class Code extends LinkedHashSet<Integer> {
+public class Code extends ArrayList<Integer> {
 
 	
 	private int getInt = 0;
@@ -12,9 +12,9 @@ public class Code extends LinkedHashSet<Integer> {
 	private final Random RANDOM = new Random();
 	
 	
-	public Code(int maxRange, int elementsNb) {
+	public Code(int minRange,int maxRange, int elementsNb) {
 		while (this.size() < elementsNb) {
-			getInt = RANDOM.nextInt(maxRange + 1);//
+			getInt = RANDOM.nextInt((maxRange-minRange + 1)+minRange);//
 			this.add(getInt);
 		}
 		this.forEach(nb -> CODE.append(nb));

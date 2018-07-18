@@ -888,7 +888,7 @@ is divided into following sections:
         <property file="${built-jar.properties}" prefix="already.built.jar."/>
         <antcall target="-warn-already-built-jar"/>
         <propertyfile file="${built-jar.properties}">
-            <entry key="${basedir}" value=""/>
+            <ENTRY key="${basedir}" value=""/>
         </propertyfile>
     </target>
     <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
@@ -1369,7 +1369,7 @@ is divided into following sections:
         <property file="${built-clean.properties}" prefix="already.built.clean."/>
         <antcall target="-warn-already-built-clean"/>
         <propertyfile file="${built-clean.properties}">
-            <entry key="${basedir}" value=""/>
+            <ENTRY key="${basedir}" value=""/>
         </propertyfile>
     </target>
     <target depends="init" name="-do-clean">

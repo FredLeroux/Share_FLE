@@ -2,56 +2,87 @@ package p3.Game;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
-public class Code {
+public class CreateCode {
 
-	protected static String code = null;
-	private int codeMaxRange;
-	private  int codeNbElements;
-	private int element;
-	private int gElement;
-	private final StringBuilder pcCode;
-	private final Random random;
+	protected String code = null;
+	protected String playerProposal = null;
 
-	public Code() {
-
-		this.codeMaxRange = 0;
-		this.codeNbElements = 0;
-		this.element = 0;
-		this.gElement = 0;
-		this.pcCode = new StringBuilder();
-		this.random = new Random();
-	}
+	protected int selectedGame = 0;
+	private int codeMaxRange = 0;
+	private int codeNbElements = 0;
+	private int element = 0;
+	private int gElement = 0;
+	private String askplayerProposal = null;
+	private String askDefenderProposal = null;
+	private final StringBuilder PC_CODE = new StringBuilder();
+	private final Random RANDOM = new Random();
+	private final Scanner ENTRY = new Scanner(System.in);
 	
-	public void setCodeMaxRange(int iCodeMAsrange) {
-		this.codeMaxRange = iCodeMAsrange;
-	}
-	public void setCodeNbElements (int iCodeNbElements) {
-		this.codeNbElements =iCodeNbElements;
+	
+	
+	
+	
+	
+	
+
+	public void setCodeMaxRange(int iCodeMaxrange) {
+		codeMaxRange = iCodeMaxrange;
 	}
 
-	public String generateRandomNb() {
-		/*if (codeMaxRange< 1 || codeMaxRange > 10) {
-			throw new RuntimeException("Digit maximum range have to be between 1 and 10");
-		}
-		if (codeNbElements < 1 || codeNbElements > codeMaxRange) {
-			throw new RuntimeException("Elements number to use have to be between 1 and digit maximum range");
-		}*/
+	public void setCodeNbElements(int iCodeNbElements) {
+		codeNbElements = iCodeNbElements;
+	}
 
-		ArrayList<Integer> sRange = new ArrayList<>();
-		for (int i = 0; i < this.codeMaxRange; i++)
-			sRange.add(i);
-		for (int i = 0; i < this.codeNbElements; i++) {
-			gElement = random.nextInt(sRange.size());
-			element = sRange.get(gElement);
-			pcCode.append(element);
-			sRange.remove(gElement);
+	public void setAskplayerProposal(String strAskplayerProposal) {
+		askplayerProposal = strAskplayerProposal;
+	}
+
+	public void setAskDefenderProposal(String strAskDefenderProposal) {
+		askDefenderProposal = strAskDefenderProposal;
+	}
+
+	public void setSelectedGamme(int iSelectedGame) {
+		selectedGame = iSelectedGame;
+	}
+
+	public String generateRANDOMNb() {
+		if (selectedGame == 1 || selectedGame == 2) {
+			ArrayList<Integer> sRange = new ArrayList<>();
+			for (int i = 0; i < codeMaxRange; i++) {
+				sRange.add(i);
+			}
+			for (int i = 0; i < codeNbElements; i++) {
+				gElement = RANDOM.nextInt(sRange.size());
+				element = sRange.get(gElement);
+				PC_CODE.append(element);
+				sRange.remove(gElement);
+			}
+			code = PC_CODE.toString();
 		}
-		code = pcCode.toString();
+		if (selectedGame == 3 || selectedGame == 4) {
+			code = playerProposal;
+		}
 		return code;
 	}
 
-	
-	
-	
+	public void getplayerProposal() {
+		if (selectedGame == 1 || selectedGame == 2) {
+			System.out.println(askplayerProposal);
+		}
+		if (selectedGame == 3 || selectedGame == 4) {
+			System.out.println(askDefenderProposal);
+
+		}
+		playerProposal = ENTRY.next();
+	}
+
+	/*
+	 * TODO put exception in tools if (codeMaxRange< 1 || codeMaxRange > 10) { throw
+	 * new RuntimeException("Digit maximum range have to be between 1 and 10"); } if
+	 * (codeNbElements < 1 || codeNbElements > codeMaxRange) { throw new
+	 * RuntimeException("Elements number to use have to be between 1 and digit maximum range"
+	 * ); }
+	 */
 }

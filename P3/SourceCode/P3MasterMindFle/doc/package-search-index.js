@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"MmPackage"}]
+packageSearchIndex = [{"l":"p3.MasterMind"}]
