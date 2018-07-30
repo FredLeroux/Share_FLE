@@ -12,19 +12,19 @@ abstract class Game {
 	protected int minRange = 0;
 	protected int maxRange = 0;
 	protected int elementsNb = 0;
-	private String opCode= null;
+	private String opEntry = null;
 	private String code = null;
-	protected String pcCode =null;
-	private String opCodeEntry = null;
+	protected String pcEntry;
+	private String opCode = null;
 	private String gameAnswer = null;
 
-	protected boolean basisVersion;
-	protected boolean cheating;
+	protected boolean basisVer;
 
+	
 	protected boolean duplicate;
 	private boolean devmode;
 	protected boolean autoMode;
-	protected boolean challengerMode;
+	private boolean challengerMode;
 	private int hit = 0;
 
 	protected HashMap<Integer, String> historic = new HashMap<>();
@@ -35,12 +35,11 @@ abstract class Game {
 		this.setMaxRange(9);
 		this.setElementsNb(4);
 		this.setMaxHit(20);
-		
-		this.duplicate = false;
-		this.autoMode = false;
+		this.pcEntry = null;
+		this.duplicate = false;		
+		this.autoMode = true;
 		this.devmode = true;
-		this.cheating = false;
-
+		
 	}
 
 	public boolean isChallengerMode() {
@@ -82,20 +81,11 @@ abstract class Game {
 
 	}
 
-	public boolean isBasisVersion() {
-		return basisVersion;
-	}
-
 	public void setVersion(int version) {
 		if (version == 1) {
-			this.basisVersion = true;
+			this.basisVer = true;
 		} else
-			this.basisVersion = false;
-	}
-	
-
-	public boolean isCheating() {
-		return cheating;
+			this.basisVer = false;
 	}
 
 	public int getMaxRange() {
@@ -103,7 +93,12 @@ abstract class Game {
 	}
 
 	public void setMaxRange(int maxRange) {
+		// isOk = true;
+		// while (isOk) {
 		System.out.println("Set Max range(min=1 max=9): Fixed for test at 9");
+		// maxRange = entry.nextInt();
+		// isOk = (maxRange < 1 || maxRange > 9);
+		// }
 		this.maxRange = maxRange;
 	}
 
@@ -112,7 +107,12 @@ abstract class Game {
 	}
 
 	public void setMinRange(int maxRange) {
+		// isOk = true;
+		// while (isOk) {
 		System.out.println("Set Min range(min=0 max=8): Fixed for test at 0");
+		// maxRange = entry.nextInt();
+		// isOk = (maxRange < 1 || maxRange > 9);
+		// }
 		this.minRange = maxRange;
 	}
 
@@ -123,7 +123,7 @@ abstract class Game {
 	public void setCode(int minRange, int maxRange, int elementsNb) {
 		String codetoCheck = null;
 		Code code = new Code(minRange, maxRange, elementsNb);
-		if (this.basisVersion == true) {
+		if (this.basisVer == true) {
 			do {
 				Code basiscode = new Code(minRange, maxRange, elementsNb);
 				codetoCheck = basiscode.toString();
@@ -134,23 +134,6 @@ abstract class Game {
 			this.code = code.toString();
 		}
 
-	}
-
-	public String getOpCode() {
-		return opCode;
-	}
-
-	public void setOpCode(String opCode) {
-		this.opCode = opCode;
-	}
-	
-
-	public String getPcCode() {
-		return pcCode;
-	}
-
-	public void setPcCode(String pcCode) {
-		this.pcCode = pcCode;
 	}
 
 	public int getHitCount() {
@@ -168,7 +151,29 @@ abstract class Game {
 	public void setMaxHit(int maxHit) {
 		System.out.println("Set maximum hit Fixed at 20 for test");
 		this.maxHit = maxHit;
+		// maxHit = entry.nextInt();
 
+	}
+
+	public String getOpEntry() {
+		return opEntry;
+	}
+
+	public void setOpEntry(String entry) throws EntryException {
+		// TODO optimized as opcode
+		boolean pass = true;
+		String code = entry;
+		try {
+			if (!(entry.length() == elementsNb))
+				throw new EntryException();
+		} catch (EntryException e) {
+			System.out.println("Your Proposition : " + code + "\nIs not composed of " + elementsNb + " elements");
+			pass = false;
+		}
+		if (pass == false)
+			opEntry = null;
+		else
+			opEntry = entry.toString();
 	}
 
 	public void avoidDuplicate(String string, int elementsNb) {
@@ -217,71 +222,86 @@ abstract class Game {
 		return gameAnswer;
 	}
 
-	public void setGameAnswer(boolean challengerMode) {
-		
+	public void setGameAnswer( boolean challengerMode) {		
 
 		if (challengerMode == true) {
-
-			this.gameAnswer = "\nSorry this is not the secret code\n" + (maxHit - (hit))
-					+ " tentative(s) remaining  on the " + maxHit + " initially attributed.\n";
-
+			
+				this.gameAnswer = "\nSorry this is not the secret code\n" + (maxHit - (hit )) + " tentative(s) remaining  on the "+ maxHit +" initially attributed.\n";
+			
 		} else {
-
-			this.gameAnswer = (maxHit - (hit)) + " tentative(s) left.\n";
-
+			
+				this.gameAnswer = (maxHit - (hit )) + " tentative(s) left.\n";
+			
 		}
-
-	}
-	public void Summary(String code, String secretCode, boolean challengerMode) {
-		ArrayList<String> summary = new ArrayList<>();
-		String comment = null;
 		
-		if(cheating == true) {
-			comment = "????!!Who cheat loose!!??? ";			
-		}
-		else {
-		if (challengerMode == false) {
-			if (code.equals(secretCode)) {
-				comment = "????SORRY YOU LOOSE???\nPc managed to find your secret code which was : " + code;
-			} else {
-				comment = "!!!!CONGRATULATION YOU WIN!!!!\nPc did not find you secret code which was : " + secretCode;
-			}
-		}
-		if (challengerMode == true) {
-			if (code.equals(secretCode)) {
-				comment = "!!!!CONGRATULATION YOU WIN!!!!\nYou managed to find Pc secret code which was : " + code;
-			} else {
-				comment = "????SORRY YOU LOOSE???\nYou did not find Pc secret code which was : " + secretCode;
-			}
-		}}
-		summary.add(comment);
-		summary.add("Game summary : ");
-		summary.forEach(elmt -> System.out.println(elmt));
-	}
 
+	}
 
 	public int getElementsNb() {
 		return elementsNb;
 	}
 
 	public void setElementsNb(int elementsNb) {
-
+		// isOk = true;
+		// while (isOk) {
 		System.out.println("Set elements number composing code(<= Max Range+1(Max range setted =" + maxRange
 				+ ")): Fixed for test at 4");
+		// elementsNb = entry.nextInt();
+		// isOk = (elementsNb > maxRange + 1);
+		// }
 		this.elementsNb = elementsNb;
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------
 
-	public String getOpcodeEntry() {
-		return opCodeEntry;
+	public String getOpcode() {
+		return opCode;
 
 	}
 
-	public void setOpcodeEntry(String opCodeEntry) {
+	/**
+	 * Impose to operator to fill a secret code with an elements number equals to
+	 * the set elements number and not allow duplicate in case of basis version.
+	 * 
+	 * @param opCode
+	 *            is the code filled by operator
+	 * 
+	 * @throws
+	 * 
+	 * 			@return
+	 *             null if exception raised
+	 */
 
-		this.opCodeEntry = opCodeEntry;
+	public void setOpcode(String opCode) throws NumberFormatException, EntryException {
+		boolean pass = true;
+		// TODO Question is it better to add multiple try catch or only one try with
+		// multiple catch
 
+		try {
+			Integer.parseInt(opCode);
+			if (opCode.length() != elementsNb)
+				throw new EntryException(opCode, elementsNb);
+			if (this.basisVer == true) {
+				avoidDuplicate(opCode, opCode.length());
+				if (duplicate == true) {
+					pass = false;
+					throw new EntryException(opCode, opCode.length(), "basis");
+				}
+			}
+
+		} catch (NumberFormatException e) {
+			System.out.println("This entry is not fully an integer\n");
+			pass = false;
+		} catch (EntryException e) {
+			pass = false;
+		}
+
+		if (pass == false) {
+
+			this.opCode = null;
+		} else {
+			this.opCode = opCode;
+		}
 	}
 
 	public int getRandom(int minValue, int maxValue) {
@@ -291,89 +311,12 @@ abstract class Game {
 		return randomNb;
 	}
 
-	public void entryCheckLength(String entry, int elementsNb) throws EntryException {
-		// TODO Question is it better to add multiple try catch or only one try with
-		// multiple catch
-		if (entry == null)
-			this.opCodeEntry = entry;
-		else {
-
-			boolean pass = true;
-			try {
-				if (entry.length() != elementsNb)
-					throw new EntryException(entry, 0);
-			} catch (EntryException e) {
-				pass = false;
-			}
-			if (pass == false)
-				this.opCodeEntry = null;
-			else
-				this.opCodeEntry = entry;
-		}
+	public String getPcEntry() {
+		return pcEntry;
 	}
 
-	public void entryIntegerCheck(String entry) throws EntryException {
-		boolean pass = true;
-		if (entry == null)
-			this.opCodeEntry = entry;
-		else {
-			boolean digitonly = entry.matches("[0-9]+");
-			try {
-				if (digitonly == false)
-					throw new EntryException(entry, 2);
-			} catch (EntryException e) {
-				pass = false;
-			}
-			if (pass == false)
-				this.opCodeEntry = null;
-			else
-				this.opCodeEntry = entry;
-		}
-	}
-
-	public void entryDuplicateCheck(String entry) throws EntryException {
-		boolean pass = true;
-		if (entry == null)
-			this.opCodeEntry = entry;
-		else {
-			try {
-				if (this.basisVersion == true)
-					avoidDuplicate(entry, entry.length());
-				if (duplicate == true)
-					throw new EntryException(opCodeEntry, 3);
-			} catch (EntryException e) {
-				pass = false;
-			}
-			if (pass == false)
-				this.opCodeEntry = null;
-			else
-				this.opCodeEntry = entry;
-		}
-	}
-
-	public void entryContentsCheck(String entry, String contains) {
-		// System.out.println(moreLess.getOpcodeEntry().matches("[[+][-][=]]+"));// n
-		// est accepter que les string ave des +-=
-		boolean pass = true;
-		if (entry == null)
-			this.opCodeEntry = entry;
-		else {
-			StringBuilder regexSb = new StringBuilder();
-			for (int i = 0; i < contains.length(); i++) {
-				regexSb.append("[" + contains.charAt(i) + "]");
-			}
-			boolean containsOnly = entry.matches("[" + regexSb.toString() + "]+");
-			try {
-				if (containsOnly == false)
-					throw new EntryException(entry, contains);
-			} catch (EntryException e) {
-				pass = false;
-			}
-			if (pass == false)
-				this.opCodeEntry = null;
-			else
-				this.opCodeEntry = entry;
-		}
+	public void setPcEntry(String str) {
+		this.pcEntry = str;
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -384,10 +327,20 @@ abstract class Game {
 	 *            define the code to compare generate by PC or by the Operator;
 	 */
 	public abstract void comparison(String secretcode, String codeToCompare);
+	
+	public abstract void autocompare(String code, String codeToCompare);
+
+	public abstract void setHistoric(String code,String answer, int getHit);
+
+	/**
+	 * @return A summary of the game
+	 * @param getGameAnswer
+	 *            Is a string generated via setGameAnswer p3.Game
+	 *
+	 */
+	public abstract void Summary(String code, String secretCode,boolean challengerMode);
 
 	
+	}
 
-	public abstract void setHistoric(String code, String answer, int getHit);
 
-
-}

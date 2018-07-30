@@ -7,15 +7,16 @@ class MoreLess extends Game {
 	private char moreIndication;
 	private char lessIndication;
 	private char equalsIndication;	
-	private String mLClues;	
+	private String mLClues;
+	private String mLCodeProposition;
 	private StringBuilder moreLessAnswer;
 	private ArrayList<Character> answertable;
-	private int cheatCount =0;
 
 	public MoreLess() {
 		this.moreIndication = '+';
 		this.lessIndication = '-';
 		this.equalsIndication = '=';		
+		this.mLCodeProposition = null;
 		historic.clear();
 	}
 
@@ -23,12 +24,22 @@ class MoreLess extends Game {
 		return mLClues;
 	}
 
-	public void setMLClues(String mLClues) {		
-		
+	public void setMLClues(String mLClues, String code, String codeToCompare, int elementNb) throws EntryException {
+		boolean pass = true;
+		try {
+			// TODO Explain in presentation why the comparison allow to not check length and
+			// composition
+			comparison(code, codeToCompare);
+			if (!answerToString().equals(mLClues))
+				throw new EntryException(answerToString(), 1);
+		} catch (EntryException e) {
+			pass = false;
+		}
+		if (pass == false)
+			this.mLClues = null;
+		else
 			this.mLClues = mLClues;
 	}
-	
-	
 
 	public String answerToString() {
 		return moreLessAnswer.toString();
@@ -37,28 +48,6 @@ class MoreLess extends Game {
 	public ArrayList<Character> getAnswertable() {
 		return this.answertable;
 	}
-	
-	public void cheatStop(String code, String codeToCompare, String mLClues) throws EntryException {
-		comparison(code, codeToCompare);		
-		if (!(this.moreLessAnswer.toString().equals(mLClues))) {
-			this.cheatCount++;
-			try {
-				if (cheatCount>0)
-					if (this.cheatCount<3)
-					throw new EntryException(cheatCount);
-					else this.cheating = true;
-						
-			} catch (EntryException e) {				
-				this.mLClues = null;
-				 
-					}}
-		
-		else 		
-		 this.mLClues=mLClues;
-
-	}
-	
-
 	
 //----------------------------------------------------------------------------------------------------
 	@Override
@@ -84,22 +73,21 @@ class MoreLess extends Game {
 		}
 		this.answertable.forEach(Elmt -> moreLessAnswer.append(Elmt));
 	}
-	
-	
-	
-
+//----------------------------------------------------------------------------------------------------
+	@Override
+	public void autocompare(String code, String codeToCompare) {
+		comparison(code, codeToCompare);
+		mLClues = answerToString();
+	}
 //----------------------------------------------------------------------------------------------------
 	@Override
 	public void setHistoric(String code, String answer, int getHit) {
-		String comment = null;
-		if(mLClues==null&&cheatCount>0 || cheating ==true)
-			comment = "(Cheating tentative).";
-		else 
-			comment =".";
-		historic.put(getHit, " was : " + code + " || The clues on this proposition are " + answer + comment);
+		historic.put(getHit, " was : " + code + " || The clues on this proposition are " + answer);
 	}
 	
-	
+	public String getmLCodeProposition() {
+		return mLCodeProposition;
+	}
 //----------------------------------------------------------------------------------------------------	
 
 	public void MorelessSecretCodeResearch(int maxRange, int minRange, int nbElements, String pcEntry) {
@@ -108,12 +96,11 @@ class MoreLess extends Game {
 		int minLimit = 0;
 		int pcEntryElmt = 0;
 		StringBuilder pcEntrySb = new StringBuilder();
-		
 
 		if (pcEntry == null) {
 			for (int i = 0; i < nbElements; i++) {
 				pcEntrySb.append(middle);
-				this.pcCode= pcEntrySb.toString();
+				this.mLCodeProposition = pcEntrySb.toString();
 			}
 		} else {
 			for (int i = 0; i < nbElements; i++) {
@@ -153,11 +140,33 @@ class MoreLess extends Game {
 
 			}
 
-			this.pcCode = pcEntrySb.toString();
+			this.mLCodeProposition = pcEntrySb.toString();
 		}
 	}
 
 	// ----------------------------------------------------------------------------------------------------
-	
-	
+	@Override
+	public void Summary(String code, String secretCode, boolean challengerMode) {
+		ArrayList<String> summary = new ArrayList<>();
+		String comment = null;
+
+		if (challengerMode == false) {
+			if (code.equals(secretCode)) {
+				comment = "????SORRY YOU LOOSE???\nPc managed to find your secret code which was : " + code;
+			} else {
+				comment = "!!!!CONGRATULATION YOU WIN!!!!\nPc did not find you secret code which was : " + secretCode;
+			}
+		}
+		if (challengerMode == true) {
+			if (code.equals(secretCode)) {
+				comment = "!!!!CONGRATULATION YOU WIN!!!!\nYou managed to find Pc secret code which was : " + code;
+			} else {
+				comment = "????SORRY YOU LOOSE???\nYou did not find Pc secret code which was : " + secretCode;
+			}
+		}
+		summary.add(comment);
+		summary.add("Game summary : ");
+		summary.forEach(elmt -> System.out.println(elmt));
+	}
+
 }

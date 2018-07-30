@@ -35,7 +35,7 @@ public class Mastermind extends Game {
 	public void setClueRightPlaced(int clueRightPlaced) {
 		boolean pass = true;
 		try {
-			comparison(getPcEntry(), getOpCode(), getElementsNb());
+			comparison(getPcEntry(), getOpcode(), getElementsNb());
 			if (nbRightPlaced != clueRightPlaced)
 				throw new EntryException();
 		} catch (EntryException e) {
@@ -57,7 +57,7 @@ public class Mastermind extends Game {
 	public void setClueElmentPresent(int clueElmentPresent) {
 		boolean pass = true;
 		try {
-			comparison(getPcEntry(), getOpCode());
+			comparison(getPcEntry(), getOpcode(), getElementsNb());
 			if (nbPresent != clueElmentPresent)
 				throw new EntryException();
 		} catch (EntryException e) {
@@ -130,7 +130,7 @@ public class Mastermind extends Game {
 			System.out.println("!System Error!  \nMastermind defender mode need a code list initiated");
 
 		}
-		this.pcCode=codeList.get(getRandom(0, (codeList.size() - 1)));
+		setPcEntry(codeList.get(getRandom(0, (codeList.size() - 1))));
 		// causse a codeliste size at 0 is an empty codelist and not a codelits with 1
 		// elment so to avoid bug -1 //to be clear a codelist with 1 string have a size
 		// of
@@ -140,7 +140,13 @@ public class Mastermind extends Game {
 
 	}
 
-	
+	public void autocompare() {
+
+		comparison(getPcEntry(),getOpcode(),  getElementsNb());
+		clueRightPlaced = nbRightPlaced;
+		clueElmentPresent = nbPresent;
+	}
+
 	@Override
 	public void comparison(String codeToCompare, String secretCode) {
 		this.nbRightPlaced = 0;
@@ -161,19 +167,22 @@ public class Mastermind extends Game {
 	}
 
 	@Override
-	public void setHistoric(String code, String answer, int getHit) {
-		
+	public void setHistoric(int getHint, boolean challengerMode) {
+		String code = null;
 		int nbRigthPlaced =0;
 		int nbPresent = 0;
-		if (this.challengerMode == true) {
+		if ( challengerMode == true) {
+			code = getOpEntry();
 			nbRigthPlaced =this.nbRightPlaced;
-			nbPresent = this.nbPresent;}
-		else {			
-			nbRigthPlaced =this.clueRightPlaced;
-			nbPresent = this.clueElmentPresent;}
-		
+			nbPresent = this.nbPresent;
 
-		historic.put(getHit, " : " + code + " // clues are " + nbRigthPlaced + " element(s) rigth placed, "
+		} else {
+			code = getPcEntry();
+			nbRigthPlaced =this.clueRightPlaced;
+			nbPresent = this.clueElmentPresent;
+		}
+
+		historic.put(getHint, " : " + code + " // clues are " + nbRigthPlaced + " element(s) rigth placed, "
 				+ nbPresent + " element(s) present");
 
 	}
@@ -181,7 +190,7 @@ public class Mastermind extends Game {
 	public void secretCodeResearch(ArrayList<String> codeList) {
 		
 		String secretCodePossible = null;
-		String codeToCompare = getPcCode();
+		String codeToCompare = getPcEntry();
 		for (int i = 0; i < codeList.size(); i++) {
 			secretCodePossible = codeList.get(i);// secret code eszt un des code de la liste car concraitement
 													// on
@@ -189,7 +198,7 @@ public class Mastermind extends Game {
 			// meme sens pour etre plus claire on etablie les clue en
 			// faisant pcentry versus opcode don on dois faire pcentry
 			// versus un des code dela liste qui contient le opcode
-			comparison(codeToCompare,secretCodePossible);
+			comparison(codeToCompare,secretCodePossible,  getElementsNb());
 			if (!(clueRightPlaced == nbRightPlaced && clueElmentPresent == nbPresent)) {
 				codeList.remove(secretCodePossible);
 
@@ -197,24 +206,24 @@ public class Mastermind extends Game {
 				continue;
 		}
 
-		codeList.remove(getPcCode());
+		codeList.remove(getPcEntry());
 		
 
 	}
 	@Override
-	public void Summary (String code, String codeToCompare, boolean challengerMode) {
-			
+	public void Summary (String getGameAnswer,boolean challengerMode) {
+			String code=null;
 			String comment =null;
-			
+			comparison(getPcEntry(),getOpcode(),getElementsNb() );
 			clueRightPlaced = nbRightPlaced;
 			clueElmentPresent = nbPresent;
-			;
+			setHistoric(getHint(),challengerMode);
 			
-			if (code.equals(codeToCompare)) {
-				
+			if (getOpcode().equals(getPcEntry())) {
+				code = getPcEntry();
 				comment ="Pc managed to find your secret code which was :" +code;}
 			else {
-				code = getOpCode();				
+				code = getOpcode();				
 				comment = "Pc did not find you secret code which was : " +code;}
 			ArrayList<String> summary = new ArrayList <>();
 			summary.add(getGameAnswer);
