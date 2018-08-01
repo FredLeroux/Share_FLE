@@ -317,7 +317,7 @@ abstract class Game {
 		if (entry == null)
 			this.opCodeEntry = entry;
 		else {
-			boolean digitonly = entry.matches("[0-9]+");
+			boolean digitonly = entry.matches("[0-9]{"+entry.length()+"}");
 			try {
 				if (digitonly == false)
 					throw new EntryException(entry, 2);
