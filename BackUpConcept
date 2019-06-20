@@ -1,0 +1,140 @@
+package com.fle.tools;
+
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import java.util.ArrayList;
+
+import javax.persistence.Column;
+
+public class InvokeMethod {
+
+	private ArrayList<String> modelColumnNames = new ArrayList<>();
+	private ArrayList<String> modelColumnFields = new ArrayList<>();
+	private ArrayList<String> modelColumnValues = new ArrayList<>();
+
+	public ArrayList<String> getModelColumnNames() {
+		return modelColumnNames;
+	}
+
+	public ArrayList<String> getModelColumnFields() {
+		return modelColumnFields;
+	}
+
+	public ArrayList<String> getModelColumnValues() {
+		return modelColumnValues;
+	}
+
+	public void setModelColumnNames(Object modelClass) {
+		Field[] fields = modelClass.getClass().getDeclaredFields();
+		for (Field field : fields)
+			//for(Field field : fields means for each field(data contained in an array or table) in fields table do something
+			{
+			Annotation modelClassAnnotation = field.getAnnotation(Column.class);
+			if (modelClassAnnotation != null) {// need to study these
+				Column columnPersistence = (Column) modelClassAnnotation;
+				// note Column is a class from JAVAX.Persistence.Column so cast annotation to
+				// this class and then call the name method
+				this.modelColumnNames.add(columnPersistence.name());
+			}
+		}
+	}
+
+	public void setmodelColumnFields(Object modelClass) {
+		Field[] fields = modelClass.getClass().getDeclaredFields();
+		for (Field field : fields) {
+			String type = field.getType().getName();
+			String str = field.getName();
+			if (!str.contains("Id") && type.contains("String")) {
+				this.modelColumnFields.add(field.getName());
+
+			}
+
+		}
+
+	}
+
+	public void setModelValues(Object modelClass)
+			throws IntrospectionException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		int i = 0;
+		for(String field : modelColumnFields) {
+		//for (i = 0; i < modelColumnFields.size(); i++) {
+			PropertyDescriptor propDesc = new PropertyDescriptor( field/*modelColumnFields.get(i)*/, modelClass.getClass());
+			Method getter = propDesc.getReadMethod();
+			Object value = getter.invoke(modelClass);
+			this.modelColumnValues.add(value.toString());
+		}
+		;
+
+	}
+  
+  package com.fle.tools;
+
+
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.TreeSet;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+
+import com.fle.model.mapping.SetModelMappingInterface;
+import com.fle.tools.modelMapping.SetModelMappingMethod;
+
+
+public class JsonBuilder {	
+
+	public HashMap<String, TreeSet<String>> initContainer(ArrayList<String> columnNameArray) {
+		HashMap<String, TreeSet<String>> container = new HashMap<String, TreeSet<String>>();
+		int i = 0;
+		for (i = 0; i < columnNameArray.size(); i++) {
+			container.put(columnNameArray.get(i), new TreeSet<String>());
+		}
+		System.out.println("initContainer");
+		return container;
+	}
+
+	public HashMap<String, TreeSet<String>> containerFiller(Collection<Object> collection, Object modelClass,
+			HashMap<String, TreeSet<String>> container, ArrayList<String> columnNameArray,
+			SetModelMappingInterface map) {
+		int i = 0;
+		Iterator<Object> iterator = collection.iterator();
+		while (iterator.hasNext()) {
+			modelClass = (Object) iterator.next();
+			
+			for (i = 0; i < columnNameArray.size(); i++) {
+				
+				container.get(columnNameArray.get(i)).add(map.setColumnGetter(modelClass).get(i).toString());
+				
+			}
+		}
+		return container;
+	}
+
+	public JsonArray buildMultipleArrayObject(HashMap<String, TreeSet<String>> container) {
+		JsonArrayBuilder dataSetJson = Json.createArrayBuilder();
+		container.forEach((key, value) -> {
+			String column = key;
+			dataSetJson.add(Json.createObjectBuilder().add(column, value.toString()).build());
+		});
+		JsonArray array = dataSetJson.build();
+		return array;
+	}
+
+	public JsonArray createJsonArray(Object modelClass, Collection<Object> collection,
+			ArrayList<String> columnNameArray, SetModelMappingInterface map) {
+		return buildMultipleArrayObject(
+				containerFiller(collection, modelClass, initContainer(columnNameArray), columnNameArray, map));
+
+	}
+
+}
+
